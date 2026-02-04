@@ -1,24 +1,28 @@
       <h1>{{ title() }} [David Ehiagwina] [S0027127]</h1> 
-      @for (movie of movies(); track movie;let i = $index; let isEven = $even;) { 
-      <ul>
+      @for (movie of movieService.movies(); track movie;let i = $index; let isEven = $even;) { 
         <li [class.evenRow]="isEven" [class.oddRow]="!isEven">
-          <button (click)="addFavourite(movie)">Favourite</button> {{movie}}
+          <button 
+          [disabled]="movieService.favourites().includes(movie.title)"
+          (click)="movieService.addFavourite(movie.title)">
+          {{ movieService.favourites().includes(movie.title) ? 'Added' : 'Favourite'}}
+        </button>
+        {{movie.title}} ({{movie.year}} - {{movie.director}})
         </li>
-      </ul> } 
+        } 
       @empty {
-
+        <li>No Movies Found</li>
        }
 
        <h1>Favourites</h1>
-       @if (favourites().length !== 0) {
-      <p style="padding: 1em;">{{favourites().length}} movies chosen</p>
+       @if (movieService.favourites().length !== 0) {
+      <p style="padding: 1em;">{{movieService.favourites().length}} movies chosen</p>
        } @else {
         <p style="padding: 1em;">You have no movies chosen 🥲</p>
        }
-      @for (movie of favourites(); track movie;let i = $index; let isEven = $even;) { 
+      @for (movie of movieService.favourites(); track movie;let i = $index; let isEven = $even;) { 
       <ul>
         <li [class.evenRow]="isEven" [class.oddRow]="!isEven">
-          <button (click)="removeFavourites(i)">Delete</button> {{movie}}
+          <button (click)="movieService.removeFavourites(i)">Delete</button> {{movie}}
         </li>
       </ul> } @empty {
 
